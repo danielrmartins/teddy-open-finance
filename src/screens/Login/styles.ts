@@ -23,4 +23,5 @@ export const TextInput = styled.TextInput`
   font-size: 24px;
   font-weight: 400;
   font-family: ${({ theme }) => theme.fontFamily.regular};
+  margin: 20px 0 20px;
 `;

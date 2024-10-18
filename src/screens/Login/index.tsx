@@ -1,10 +1,13 @@
+import { useNavigation } from "@react-navigation/native";
 import { Button } from "@components/Button";
+
 import { Container, TextInput, Title } from "./styles";
 
 export function Login() {
+  const navigate = useNavigation();
 
   function onPressButton() {
-    console.log("Button pressed");
+    navigate.navigate('clients');
   }
   
   return (
