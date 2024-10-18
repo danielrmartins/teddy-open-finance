@@ -16,7 +16,7 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <StatusBar style="auto" />
       {fontsLoaded ? <Routes /> : <ActivityIndicator />} 
-          {/* <List size={24} color='gray' /> 
+          {/* 
           <Plus size={17} weight='bold' />
           <PencilSimple size={20} weight='bold' />
           <Trash size={20} weight='bold' color='red' />
