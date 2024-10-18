@@ -8,8 +8,7 @@
       "@screens/*": ["./src/screens/*"],
       "@assets/*": ["./src/assets/*"],
       "@storage/*": ["./src/storage/*"],
-      "@utils/*": ["./src/utils/*"],
-      "@routes/*": ["./src/routes/*"]
+      "@utils/*": ["./src/utils/*"]
     }
   }
 }

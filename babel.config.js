@@ -11,7 +11,6 @@ module.exports = function(api) {
           '@assets': './src/assets',
           '@storage': './src/storage',
           '@utils': './src/utils',
-          '@routes': './src/routes',
         },
       }],
     ],
