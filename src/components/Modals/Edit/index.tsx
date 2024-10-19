@@ -3,13 +3,47 @@ import { Modal, TouchableWithoutFeedback } from "react-native";
 import { ModalContainer, ModalContent, ModalOverlay, Title, TitleContent } from "./styles";
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
+import { useEffect, useState } from "react";
+
+type IClient = {
+  id: string;
+  name: string;
+  salary: number;
+  companyValuation: number;
+}
 
 interface EditModalProps {
   visible: boolean;
   onCancel: () => void;
+  client: IClient | null;
+  onSave: (client: IClient) => void;
 }
 
-export function EditModal({ visible, onCancel }: EditModalProps) {
+export function EditModal({ visible, onCancel, client, onSave }: EditModalProps) {
+  const [name, setName] = useState('');
+  const [salary, setSalary] = useState('');
+  const [companyValuation, setCompanyValuation] = useState('');
+
+  console.log(client);
+
+  useEffect(() => {
+    if (client) {
+      setName(client.name);
+      setSalary(client.salary.toString());
+      setCompanyValuation(client.companyValuation.toString());
+    } else {
+      setName('');
+      setSalary('');
+      setCompanyValuation('');
+    }
+  }, [client]);
+
+  function handleSave() {
+    if (client) {
+      onSave({ ...client, name, salary: Number(salary), companyValuation: Number(companyValuation) });
+    }
+  }
+
   return (
     <Modal visible={visible} animationType="slide" transparent onRequestClose={onCancel}>
       <TouchableWithoutFeedback onPress={onCancel}>
@@ -20,10 +54,22 @@ export function EditModal({ visible, onCancel }: EditModalProps) {
                 <Title>Editar cliente</Title>
               </TitleContent>
               <ModalContent>
-                <Input placeholder="Digite o nome:" title="Nome" />
-                <Input placeholder="Digite o salário:" title="Salário" />
-                <Input placeholder="Digite o valor da empresa:" title="Valor da empresa" />
-                <Button onPress={onCancel} text="Editar cliente"/>
+                <Input placeholder="Digite o nome:" title="Nome" value={name} onChangeText={setName}/>
+                <Input 
+                  placeholder="Digite o salário:" 
+                  title="Salário" 
+                  value={salary} 
+                  keyboardType="number-pad" 
+                  onChangeText={setSalary} 
+                />
+                <Input 
+                  placeholder="Digite o valor da empresa:" 
+                  title="Valor da empresa" 
+                  value={companyValuation} 
+                  keyboardType="number-pad" 
+                  onChangeText={setCompanyValuation} 
+                />
+                <Button onPress={handleSave} text="Editar cliente"/>
               </ModalContent>
             </ModalContainer>
           </TouchableWithoutFeedback>

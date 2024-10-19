@@ -54,6 +54,11 @@ export function Clients() {
     setIsDeleteModalVisible(true);
   };
 
+  const closeModalDelete = () => {
+    setIsDeleteModalVisible(false);
+    setSelectedClient(null);
+  }
+
   const handleDelete = async () => {
     if (selectedClient) {
       try {
@@ -69,6 +74,29 @@ export function Clients() {
 
   const openModalEdit = (client: IClient) => {
     setSelectedClient(client);
+    setIsEditModalVisible(true);
+  }
+
+  const closeModalEdit = () => {
+    setIsEditModalVisible(false);
+    setSelectedClient(null);
+  }
+
+  const handleSave = async (client: IClient) => {
+    try {
+      const { data } = await api.patch(`/users/${client.id}`, client);
+      const updatedClients = clients.map(c => c.id === data.id ? data : c);
+      setClients(updatedClients);
+      setSelectedClient(null);
+    } catch (error) {
+      console.error('Error updating client:', error);
+    }
+
+    setIsEditModalVisible(false);
+  }
+
+  const openModalCreate = () => {
+    setSelectedClient(null);
     setIsEditModalVisible(true);
   }
 
@@ -122,7 +150,7 @@ export function Clients() {
             </View>
           </View>
           {renderClients()}
-          <Button text="Criar cliente" type="secondary" />
+          <Button text="Criar cliente" type="secondary" onPress={openModalCreate}/>
           <Pagination currentPage={page} totalPages={totalPages} onPageChange={onPageChange} />
         </Content>
       )}
@@ -130,10 +158,15 @@ export function Clients() {
       <DeleteModal 
         clientName={selectedClient?.name} 
         visible={isDeleteModalVisible} 
-        onCancel={() => setIsDeleteModalVisible(false)}
+        onCancel={closeModalDelete}
         onConfirm={() => handleDelete()}
       />
-      <EditModal visible={isEditModalVisible} onCancel={() => setIsEditModalVisible(false)}/>
+      <EditModal 
+        visible={isEditModalVisible} 
+        onCancel={closeModalEdit} 
+        client={selectedClient}
+        onSave={handleSave}
+      />
       {/* <DrawerModal visible={isModalVisible} onClose={() => setIsModalVisible(false)} /> */}
     </SafeArea>
   )
