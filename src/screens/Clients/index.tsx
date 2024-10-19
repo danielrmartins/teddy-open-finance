@@ -1,6 +1,6 @@
 import { List } from "phosphor-react-native";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Text } from "react-native";
+import { ActivityIndicator, FlatList, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import logoImg from '@assets/teddy-logo.png';
@@ -10,7 +10,7 @@ import { DeleteModal } from "@components/Modals/Delete";
 import { EditModal } from "@components/Modals/Edit";
 // import DrawerModal from "@components/Drawer";
 
-import { Container, Header, Logo } from "./styles";
+import { BoldText, Container, Content, Header, Logo, SafeArea, Text } from "./styles";
 
 
 export interface IClient {
@@ -22,7 +22,7 @@ export interface IClient {
 
 export function Clients() {
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(1);
+  const [limit, setLimit] = useState(10);
   const [clients, setClients] = useState<IClient[]>([]);
   const [loading, setLoading] = useState(true);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
@@ -73,13 +73,19 @@ export function Clients() {
       return <ActivityIndicator />
     }
 
-    return clients.map(client => (
-      <Card key={client.id} client={client} openModalDelete={openModalDelete} openModalEdit={openModalEdit} />
-    ));
+    // return clients.map(client => (
+    //   <Card key={client.id} client={client} openModalDelete={openModalDelete} openModalEdit={openModalEdit} />
+    // ));
+
+    return (
+      <FlatList data={clients} keyExtractor={client => client.id} renderItem={({ item }) => (
+        <Card client={item} openModalDelete={openModalDelete} openModalEdit={openModalEdit} />
+      )}  contentContainerStyle={{ width: '100%', flexGrow: 1 }} showsVerticalScrollIndicator={false} />
+    )
   }
 
   return (
-    <SafeAreaView>
+    <SafeArea>
       <Header>
         <Logo source={logoImg}/>
         {/* <TouchableOpacity onPress={() => setIsModalVisible(true)}> */}
@@ -87,8 +93,16 @@ export function Clients() {
         {/* </TouchableOpacity> */}
       </Header>
       <Container>
-      {loading ? <ActivityIndicator /> : <Text>{`${clients.length} ${clients.length === 1 ? 'cliente encontrado' : 'clientes encontrados'}`}</Text>}
-      {renderClients()}
+      {loading ? (
+        <ActivityIndicator />
+      ) : (
+        <Content>
+          <Text>
+            <BoldText>{clients.length}</BoldText> {clients.length === 1 ? 'cliente encontrado' : 'clientes encontrados'}
+            </Text>
+          {renderClients()}
+        </Content>
+      )}
       </Container>
       <DeleteModal 
         clientName={selectedClient?.name} 
@@ -98,6 +112,6 @@ export function Clients() {
       />
       <EditModal visible={isEditModalVisible} onCancel={() => setIsEditModalVisible(false)}/>
       {/* <DrawerModal visible={isModalVisible} onClose={() => setIsModalVisible(false)} /> */}
-    </SafeAreaView>
+    </SafeArea>
   )
 }
