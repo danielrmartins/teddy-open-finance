@@ -7,6 +7,7 @@ import logoImg from '@assets/teddy-logo.png';
 import { api } from "@services/api";
 import { Card } from "@components/Card";
 import { DeleteModal } from "@components/Modals/Delete";
+import { EditModal } from "@components/Modals/Edit";
 // import DrawerModal from "@components/Drawer";
 
 import { Container, Header, Logo } from "./styles";
@@ -24,8 +25,8 @@ export function Clients() {
   const [limit, setLimit] = useState(1);
   const [clients, setClients] = useState<IClient[]>([]);
   const [loading, setLoading] = useState(true);
-  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [selectedClient, setSelectedClient] = useState<IClient | null>(null);
 
   useEffect(() => {
@@ -62,13 +63,18 @@ export function Clients() {
     }
   }
 
+  const openModalEdit = (client: IClient) => {
+    setSelectedClient(client);
+    setIsEditModalVisible(true);
+  }
+
   const renderClients = () => {
     if (loading) {
       return <ActivityIndicator />
     }
 
     return clients.map(client => (
-      <Card key={client.id} client={client} openModalDelete={openModalDelete}/>
+      <Card key={client.id} client={client} openModalDelete={openModalDelete} openModalEdit={openModalEdit} />
     ));
   }
 
@@ -90,6 +96,7 @@ export function Clients() {
         onCancel={() => setIsDeleteModalVisible(false)}
         onConfirm={() => handleDelete()}
       />
+      <EditModal visible={isEditModalVisible} onCancel={() => setIsEditModalVisible(false)}/>
       {/* <DrawerModal visible={isModalVisible} onClose={() => setIsModalVisible(false)} /> */}
     </SafeAreaView>
   )
