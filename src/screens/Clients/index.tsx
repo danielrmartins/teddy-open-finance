@@ -5,11 +5,12 @@ import { Picker } from "@react-native-picker/picker";
 
 import logoImg from '@assets/teddy-logo.png';
 import { api } from "@services/api";
+import { Button } from "@components/Button";
 import { Card } from "@components/Card";
 import { DeleteModal } from "@components/Modals/Delete";
 import { EditModal } from "@components/Modals/Edit";
+import { Pagination } from "@components/Pagination";
 // import DrawerModal from "@components/Drawer";
-
 import { BoldText, Container, Content, Header, Logo, SafeArea, Text } from "./styles";
 
 
@@ -23,6 +24,7 @@ export interface IClient {
 export function Clients() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
   const [clients, setClients] = useState<IClient[]>([]);
   const [loading, setLoading] = useState(true);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
@@ -35,6 +37,8 @@ export function Clients() {
         const { data } = await api.get('/users', { params: { page, limit }});
         
         setClients(data.clients);
+        setTotalPages(data.totalPages);
+        setPage(data.currentPage);
       } catch (error) {
         console.error('Error fetching clients:', error);
       } finally {
@@ -73,6 +77,11 @@ export function Clients() {
     setLimit(value);
   }
 
+  const onPageChange = (page: number) => {
+    setLoading(true);
+    setPage(page);
+  }
+
   const renderClients = () => {
     if (loading) {
       return <ActivityIndicator />
@@ -98,12 +107,13 @@ export function Clients() {
         <ActivityIndicator />
       ) : (
         <Content>
-          <Text>
+          <Text style={{ fontSize: 18 }}>
             <BoldText>{clients.length}</BoldText> {clients.length === 1 ? 'cliente encontrado:' : 'clientes encontrados:'}
           </Text>
-          <View style={{ alignItems: 'center' }}>
+          <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'center', gap: 5 }}>
+            <Text style={{ fontSize: 18 }}>Clientes por página:</Text>
             <View style={{ borderWidth: 0.5, borderColor: 'black', borderRadius: 5 }}>
-              <Picker selectedValue={limit} onValueChange={selectedPickerValue} style={{ height: 50, width: 100 }}>
+              <Picker selectedValue={limit} onValueChange={selectedPickerValue} style={{ height: 30, width: 100 }}>
                 <Picker.Item label="1" value={1} />
                 <Picker.Item label="5" value={5} />
                 <Picker.Item label="10" value={10} />
@@ -112,6 +122,8 @@ export function Clients() {
             </View>
           </View>
           {renderClients()}
+          <Button text="Criar cliente" type="secondary" />
+          <Pagination currentPage={page} totalPages={totalPages} onPageChange={onPageChange} />
         </Content>
       )}
       </Container>

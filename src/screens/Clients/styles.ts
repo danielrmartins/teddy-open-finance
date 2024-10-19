@@ -23,6 +23,7 @@ export const Logo = styled.Image`
 `;
 
 export const Content = styled.View`
+  flex: 1;
   gap: 20px;
 `;
 
@@ -37,8 +38,6 @@ export const BoldText = styled.Text`
 export const Container = styled.View`
   flex: 1;
   width: 100%;
-  /* align-items: center; */
-  /* justify-content: center; */
   padding: 20px;
   background-color: #f5f5f5;
 `;
