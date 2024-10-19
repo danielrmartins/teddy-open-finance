@@ -1,4 +1,5 @@
 import { PencilSimple, Plus, Trash } from "phosphor-react-native";
+import { TouchableOpacity } from "react-native";
 
 import { ClientContainer, ClientName, ClientSalary, Container, IconsContainer } from "./styles";
 
@@ -11,9 +12,10 @@ type IClient = {
 
 type CardProps = {
   client: IClient;
+  openModalDelete: (client: IClient) => void;
 };
 
-export function Card({ client }: CardProps) {
+export function Card({ client, openModalDelete }: CardProps) {
   return (
     <Container>
       <ClientContainer>
@@ -24,7 +26,9 @@ export function Card({ client }: CardProps) {
       <IconsContainer>
         <Plus size={17} weight='bold' />
         <PencilSimple size={20} weight='bold' />
-        <Trash size={20} weight='bold' color='red' />
+        <TouchableOpacity onPress={() => openModalDelete(client)}>
+          <Trash size={20} weight='bold' color='red' />
+        </TouchableOpacity>
       </IconsContainer>
     </Container>
   );
