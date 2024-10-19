@@ -1,7 +1,7 @@
 import { List } from "phosphor-react-native";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Picker } from "@react-native-picker/picker";
 
 import logoImg from '@assets/teddy-logo.png';
 import { api } from "@services/api";
@@ -68,14 +68,15 @@ export function Clients() {
     setIsEditModalVisible(true);
   }
 
+  const selectedPickerValue = (value: number) => {
+    setLoading(true);
+    setLimit(value);
+  }
+
   const renderClients = () => {
     if (loading) {
       return <ActivityIndicator />
     }
-
-    // return clients.map(client => (
-    //   <Card key={client.id} client={client} openModalDelete={openModalDelete} openModalEdit={openModalEdit} />
-    // ));
 
     return (
       <FlatList data={clients} keyExtractor={client => client.id} renderItem={({ item }) => (
@@ -98,8 +99,18 @@ export function Clients() {
       ) : (
         <Content>
           <Text>
-            <BoldText>{clients.length}</BoldText> {clients.length === 1 ? 'cliente encontrado' : 'clientes encontrados'}
-            </Text>
+            <BoldText>{clients.length}</BoldText> {clients.length === 1 ? 'cliente encontrado:' : 'clientes encontrados:'}
+          </Text>
+          <View style={{ alignItems: 'center' }}>
+            <View style={{ borderWidth: 0.5, borderColor: 'black', borderRadius: 5 }}>
+              <Picker selectedValue={limit} onValueChange={selectedPickerValue} style={{ height: 50, width: 100 }}>
+                <Picker.Item label="1" value={1} />
+                <Picker.Item label="5" value={5} />
+                <Picker.Item label="10" value={10} />
+                <Picker.Item label="15" value={15} />
+              </Picker>
+            </View>
+          </View>
           {renderClients()}
         </Content>
       )}
