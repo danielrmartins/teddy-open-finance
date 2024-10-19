@@ -13,9 +13,10 @@ type IClient = {
 type CardProps = {
   client: IClient;
   openModalDelete: (client: IClient) => void;
+  openModalEdit: (client: IClient) => void;
 };
 
-export function Card({ client, openModalDelete }: CardProps) {
+export function Card({ client, openModalDelete,openModalEdit }: CardProps) {
   return (
     <Container>
       <ClientContainer>
@@ -25,7 +26,9 @@ export function Card({ client, openModalDelete }: CardProps) {
       </ClientContainer>
       <IconsContainer>
         <Plus size={17} weight='bold' />
-        <PencilSimple size={20} weight='bold' />
+        <TouchableOpacity onPress={() => openModalEdit(client)}>
+          <PencilSimple size={20} weight='bold' />
+        </TouchableOpacity>
         <TouchableOpacity onPress={() => openModalDelete(client)}>
           <Trash size={20} weight='bold' color='red' />
         </TouchableOpacity>
