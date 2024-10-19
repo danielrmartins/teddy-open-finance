@@ -19,12 +19,10 @@ interface EditModalProps {
   onSave: (client: IClient) => void;
 }
 
-export function EditModal({ visible, onCancel, client, onSave }: EditModalProps) {
+export function EditOrCreateModal({ visible, onCancel, client, onSave }: EditModalProps) {
   const [name, setName] = useState('');
   const [salary, setSalary] = useState('');
   const [companyValuation, setCompanyValuation] = useState('');
-
-  console.log(client);
 
   useEffect(() => {
     if (client) {
@@ -41,6 +39,8 @@ export function EditModal({ visible, onCancel, client, onSave }: EditModalProps)
   function handleSave() {
     if (client) {
       onSave({ ...client, name, salary: Number(salary), companyValuation: Number(companyValuation) });
+    } else {
+      onSave({ name, salary: Number(salary), companyValuation: Number(companyValuation) });
     }
   }
 
@@ -51,7 +51,7 @@ export function EditModal({ visible, onCancel, client, onSave }: EditModalProps)
           <TouchableWithoutFeedback>
             <ModalContainer>
               <TitleContent>
-                <Title>Editar cliente</Title>
+                <Title>{client ? "Editar cliente" : "Criar cliente"}</Title>
               </TitleContent>
               <ModalContent>
                 <Input placeholder="Digite o nome:" title="Nome" value={name} onChangeText={setName}/>
@@ -69,7 +69,7 @@ export function EditModal({ visible, onCancel, client, onSave }: EditModalProps)
                   keyboardType="number-pad" 
                   onChangeText={setCompanyValuation} 
                 />
-                <Button onPress={handleSave} text="Editar cliente"/>
+                <Button onPress={handleSave} text={client ? "Editar cliente" : "Criar cliente"}/>
               </ModalContent>
             </ModalContainer>
           </TouchableWithoutFeedback>

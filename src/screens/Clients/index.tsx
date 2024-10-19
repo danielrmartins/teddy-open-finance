@@ -1,6 +1,6 @@
 import { List } from "phosphor-react-native";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, View } from "react-native";
+import { ActivityIndicator, FlatList, TouchableOpacity, View } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 
 import logoImg from '@assets/teddy-logo.png';
@@ -8,11 +8,10 @@ import { api } from "@services/api";
 import { Button } from "@components/Button";
 import { Card } from "@components/Card";
 import { DeleteModal } from "@components/Modals/Delete";
-import { EditModal } from "@components/Modals/Edit";
+import { EditOrCreateModal } from "@components/Modals/Edit";
 import { Pagination } from "@components/Pagination";
-// import DrawerModal from "@components/Drawer";
+import DrawerModal from "@components/Drawer";
 import { BoldText, Container, Content, Header, Logo, SafeArea, Text } from "./styles";
-
 
 export interface IClient {
   id: string;
@@ -29,6 +28,7 @@ export function Clients() {
   const [loading, setLoading] = useState(true);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [showDrawer, setShowDrawer] = useState(false);
   const [selectedClient, setSelectedClient] = useState<IClient | null>(null);
 
   useEffect(() => {
@@ -84,10 +84,17 @@ export function Clients() {
 
   const handleSave = async (client: IClient) => {
     try {
-      const { data } = await api.patch(`/users/${client.id}`, client);
-      const updatedClients = clients.map(c => c.id === data.id ? data : c);
-      setClients(updatedClients);
-      setSelectedClient(null);
+      if (!client.id) {
+        const { data } = await api.post('/users', client);
+
+        setClients([...clients, data]);
+      } else {
+        const { data } = await api.patch(`/users/${client.id}`, client);
+        const updatedClients = clients.map(c => c.id === data.id ? data : c);
+
+        setClients(updatedClients);
+        setSelectedClient(null);
+      }
     } catch (error) {
       console.error('Error updating client:', error);
     }
@@ -126,9 +133,9 @@ export function Clients() {
     <SafeArea>
       <Header>
         <Logo source={logoImg}/>
-        {/* <TouchableOpacity onPress={() => setIsModalVisible(true)}> */}
-        <List size={24} color='gray' />
-        {/* </TouchableOpacity> */}
+        <TouchableOpacity onPress={() => setShowDrawer(true)}>
+          <List size={24} color='gray' />
+        </TouchableOpacity>
       </Header>
       <Container>
       {loading ? (
@@ -161,13 +168,13 @@ export function Clients() {
         onCancel={closeModalDelete}
         onConfirm={() => handleDelete()}
       />
-      <EditModal 
+      <EditOrCreateModal 
         visible={isEditModalVisible} 
         onCancel={closeModalEdit} 
         client={selectedClient}
         onSave={handleSave}
       />
-      {/* <DrawerModal visible={isModalVisible} onClose={() => setIsModalVisible(false)} /> */}
+      <DrawerModal visible={showDrawer} onClose={() => setShowDrawer(false)} />
     </SafeArea>
   )
 }
