@@ -15,11 +15,7 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <StatusBar style="auto" />
       {fontsLoaded ? <Routes /> : <ActivityIndicator />} 
-          {/* 
-          <HouseSimple size={20} weight='fill' />
-          <User size={20} weight='fill' color='#EE7D46'/>
-          <SquaresFour size={20} weight='fill' />
-          <Minus size={20} weight='bold' color='red'/>*/}
+          {/* <Minus size={20} weight='bold' color='red'/>*/}
     </ThemeProvider>
   );
 }
