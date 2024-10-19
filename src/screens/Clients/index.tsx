@@ -1,11 +1,12 @@
 import { List } from "phosphor-react-native";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
+import { ActivityIndicator, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import logoImg from '@assets/teddy-logo.png';
 import { api } from "@services/api";
 import { Card } from "@components/Card";
+import { DeleteModal } from "@components/Modals/Delete";
 // import DrawerModal from "@components/Drawer";
 
 import { Container, Header, Logo } from "./styles";
@@ -23,7 +24,9 @@ export function Clients() {
   const [limit, setLimit] = useState(1);
   const [clients, setClients] = useState<IClient[]>([]);
   const [loading, setLoading] = useState(true);
-  // const [isModalVisible, setIsModalVisible] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [selectedClient, setSelectedClient] = useState<IClient | null>(null);
 
   useEffect(() => {
     async function fetchClients() {
@@ -41,13 +44,31 @@ export function Clients() {
     fetchClients();
   }, [page, limit]);
 
+  const openModalDelete = (client: IClient) => {
+    setSelectedClient(client);
+    setIsDeleteModalVisible(true);
+  };
+
+  const handleDelete = async () => {
+    if (selectedClient) {
+      try {
+        await api.delete(`/users/${selectedClient.id}`);
+        setClients(clients.filter(client => client.id !== selectedClient.id));
+      } catch (error) {
+        console.error('Error deleting client:', error);
+      }
+
+      setIsDeleteModalVisible(false);
+    }
+  }
+
   const renderClients = () => {
     if (loading) {
       return <ActivityIndicator />
     }
 
     return clients.map(client => (
-      <Card key={client.id} client={client} />
+      <Card key={client.id} client={client} openModalDelete={openModalDelete}/>
     ));
   }
 
@@ -63,6 +84,12 @@ export function Clients() {
       {loading ? <ActivityIndicator /> : <Text>{`${clients.length} ${clients.length === 1 ? 'cliente encontrado' : 'clientes encontrados'}`}</Text>}
       {renderClients()}
       </Container>
+      <DeleteModal 
+        clientName={selectedClient?.name} 
+        visible={isDeleteModalVisible} 
+        onCancel={() => setIsDeleteModalVisible(false)}
+        onConfirm={() => handleDelete()}
+      />
       {/* <DrawerModal visible={isModalVisible} onClose={() => setIsModalVisible(false)} /> */}
     </SafeAreaView>
   )
