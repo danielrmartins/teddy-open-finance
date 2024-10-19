@@ -14,7 +14,7 @@ export function Login() {
     <Container>
       <Title>Olá, seja bem vindo!</Title>
       <TextInput placeholder="Digite o seu nome:" />
-      <Button onPress={onPressButton}/>
+      <Button onPress={onPressButton} text="Entrar"/>
     </Container>
   );
 }
