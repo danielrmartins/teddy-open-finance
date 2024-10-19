@@ -95,6 +95,7 @@ const styles = StyleSheet.create({
   },
   pageText: {
     color: 'black',
+    fontWeight: 'bold',
   },
   activePageText: {
     color: 'white',
