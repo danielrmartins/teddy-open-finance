@@ -15,7 +15,6 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <StatusBar style="auto" />
       {fontsLoaded ? <Routes /> : <ActivityIndicator />} 
-          {/* <Minus size={20} weight='bold' color='red'/>*/}
     </ThemeProvider>
   );
 }
