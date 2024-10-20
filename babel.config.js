@@ -9,8 +9,6 @@ module.exports = function(api) {
           '@components': './src/components',
           '@screens': './src/screens',
           '@assets': './assets',
-          '@storage': './src/storage',
-          '@utils': './src/utils',
           '@services': './src/services',
         },
       }],
