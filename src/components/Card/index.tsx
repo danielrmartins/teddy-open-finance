@@ -30,20 +30,20 @@ export function Card({ client, openModalDelete,openModalEdit, addClient, storedC
       <IconsContainer storedClients={storedClients}>
         {!storedClients && (
           <>
-            <TouchableOpacity onPress={() => addClient?.(client)}>
+            <TouchableOpacity testID="plus-icon" onPress={() => addClient?.(client)}>
               <Plus size={17} weight='bold' />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => openModalEdit?.(client)}>
+            <TouchableOpacity testID="edit-icon" onPress={() => openModalEdit?.(client)}>
               <PencilSimple size={20} weight='bold' />
             </TouchableOpacity>
           </>
         )}
         {!storedClients ? (
-        <TouchableOpacity onPress={() => openModalDelete?.(client)}>
+        <TouchableOpacity testID="delete-icon" onPress={() => openModalDelete?.(client)}>
           <Trash size={20} weight='bold' color='red' />
         </TouchableOpacity>
         ) : (
-          <TouchableOpacity onPress={() => removeStoredClient?.(client)}>
+          <TouchableOpacity testID="minus-icon" onPress={() => removeStoredClient?.(client)}>
             <Minus size={20} weight='bold' color='red'/>
           </TouchableOpacity>
         )}
