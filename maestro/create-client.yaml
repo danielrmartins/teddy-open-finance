@@ -1,0 +1,15 @@
+appId: com.anonymous.teddyopenfinance # This is an example app id. Replace it with your app id.
+---
+- launchApp
+- tapOn: 'Digite o seu nome:'
+- inputText: 'Teddy'
+- tapOn: 'Entrar'
+- tapOn: 'Criar cliente'
+- tapOn: 'Digite o nome:'
+- inputText: 'John Maestro'
+- tapOn: 'Digite o salário:'
+- inputText: '5000'
+- tapOn: 'Digite o valor da empresa:'
+- inputText: '100000'
+- tapOn:
+    id: "create"

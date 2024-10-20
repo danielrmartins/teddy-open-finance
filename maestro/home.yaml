@@ -1,0 +1,7 @@
+appId: com.anonymous.teddyopenfinance
+---
+- launchApp
+- assertVisible: 'Olá, seja bem vindo!'
+- tapOn: 'Digite o seu nome:'
+- inputText: 'Teddy'
+- tapOn: 'Entrar'

@@ -1,0 +1,16 @@
+appId: com.anonymous.teddyopenfinance # This is an example app id. Replace it with your app id.
+---
+- launchApp
+- tapOn: 'Digite o seu nome:'
+- inputText: 'Teddy'
+- tapOn: 'Entrar'
+- tapOn:
+    id: "phosphor-react-native-plus-bold"
+    index: 0
+- tapOn:
+    id: "phosphor-react-native-plus-bold"
+    index: 1
+- tapOn:
+    id: "phosphor-react-native-list"
+- tapOn: "Clientes"
+- tapOn: "Limpar clientes selecionados"

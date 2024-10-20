@@ -69,7 +69,7 @@ export function EditOrCreateModal({ visible, onCancel, client, onSave }: EditMod
                   keyboardType="number-pad" 
                   onChangeText={setCompanyValuation} 
                 />
-                <Button onPress={handleSave} text={client ? "Editar cliente" : "Criar cliente"}/>
+                <Button testId="create" onPress={handleSave} text={client ? "Editar cliente" : "Criar cliente"}/>
               </ModalContent>
             </ModalContainer>
           </TouchableWithoutFeedback>
