@@ -1,21 +1,39 @@
 import { HouseSimple, SquaresFour, User } from 'phosphor-react-native';
-import React, { useRef, useEffect, useState } from 'react';
-import { Modal, View, Text, TouchableOpacity, StyleSheet, Image, Animated } from 'react-native';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
+import { Modal, View, Text, TouchableOpacity, StyleSheet, Image, Animated, TouchableWithoutFeedback } from 'react-native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 import logoImg from '@assets/teddy-logo.png';
 
 interface DrawerModalProps {
   visible: boolean;
   onClose: () => void;
+  selected: 'clients' | 'myClients' | 'products';
 }
 
-const DrawerModal = ({ visible, onClose }: DrawerModalProps) => {
+const DrawerModal = ({ visible, onClose, selected }: DrawerModalProps) => {
   const slideAnim = useRef(new Animated.Value(300)).current;
 
-  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const navigate = useNavigation();
+
+  const [selectedItem, setSelectedItem] = useState<string | null>();
+
+  useFocusEffect(
+    useCallback(() => {
+      setSelectedItem(selected);
+    }, [selected])
+  );
 
   const handleSelect = (item: string) => {
     setSelectedItem(item);
+
+    if (item === 'myClients') {
+      navigate.navigate('myClients');
+    }
+
+    if (item === 'clients') {
+      navigate.navigate('clients');
+    }
   };
 
   useEffect(() => {
@@ -36,30 +54,36 @@ const DrawerModal = ({ visible, onClose }: DrawerModalProps) => {
 
   return (
     <Modal visible={visible} animationType="none" transparent onRequestClose={onClose}>
-      <View style={styles.modalOverlay}>
-        <Animated.View style={[styles.logoContainer, { transform: [{ translateX: slideAnim }] }]}>
-          <Image source={logoImg} style={styles.logo} />
-        </Animated.View>
-        <Animated.View style={[styles.drawerContent, { transform: [{ translateX: slideAnim }] }]}>
-          <View style={{ gap: 30 }}>
-            <TouchableOpacity onPress={() => handleSelect('home')} style={styles.itemContainer}>
-              <HouseSimple size={20} weight='fill' color={selectedItem === 'home' ? '#EE7D46' : 'black'} />
-              <Text style={[styles.text, selectedItem === 'home' && styles.selectedText]}>Home</Text>
-              {selectedItem === 'home' && <View style={styles.verticalLine} />}
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleSelect('clientes')} style={styles.itemContainer}>
-              <User size={20} weight='fill' color={selectedItem === 'clientes' ? '#EE7D46' : 'black'} />
-              <Text style={[styles.text, selectedItem === 'clientes' && styles.selectedText]}>Clientes</Text>
-              {selectedItem === 'clientes' && <View style={styles.verticalLine} />}
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleSelect('produtos')} style={styles.itemContainer}>
-              <SquaresFour size={20} weight='fill' color={selectedItem === 'produtos' ? '#EE7D46' : 'black'} />
-              <Text style={[styles.text, selectedItem === 'produtos' && styles.selectedText]}>Produtos</Text>
-              {selectedItem === 'produtos' && <View style={styles.verticalLine} />}
-            </TouchableOpacity>
-          </View>
-        </Animated.View>
-      </View>
+      <TouchableWithoutFeedback onPress={onClose}>
+        <View style={styles.modalOverlay}>
+          <TouchableWithoutFeedback>
+            <>
+              <Animated.View style={[styles.logoContainer, { transform: [{ translateX: slideAnim }] }]}>
+                <Image source={logoImg} style={styles.logo} />
+              </Animated.View>
+              <Animated.View style={[styles.drawerContent, { transform: [{ translateX: slideAnim }] }]}>
+                <View style={{ gap: 30 }}>
+                  <TouchableOpacity onPress={() => handleSelect('clients')} style={styles.itemContainer}>
+                    <HouseSimple size={20} weight='fill' color={selectedItem === 'clients' ? '#EE7D46' : 'black'} />
+                    <Text style={[styles.text, selectedItem === 'clients' && styles.selectedText]}>Home</Text>
+                    {selectedItem === 'clients' && <View style={styles.verticalLine} />}
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => handleSelect('myClients')} style={styles.itemContainer}>
+                    <User size={20} weight='fill' color={selectedItem === 'myClients' ? '#EE7D46' : 'black'} />
+                    <Text style={[styles.text, selectedItem === 'myClients' && styles.selectedText]}>Clientes</Text>
+                    {selectedItem === 'myClients' && <View style={styles.verticalLine} />}
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => handleSelect('products')} style={styles.itemContainer}>
+                    <SquaresFour size={20} weight='fill' color={selectedItem === 'products' ? '#EE7D46' : 'black'} />
+                    <Text style={[styles.text, selectedItem === 'products' && styles.selectedText]}>Produtos</Text>
+                    {selectedItem === 'products' && <View style={styles.verticalLine} />}
+                  </TouchableOpacity>
+                </View>
+              </Animated.View>
+            </>
+          </TouchableWithoutFeedback>
+        </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 };
