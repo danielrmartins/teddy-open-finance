@@ -11,9 +11,9 @@ export const Container = styled.TouchableOpacity<{ type: 'primary' | 'secondary'
   width: 100%;
 `;
 
-export const Text = styled.Text<{ type: 'primary' | 'secondary' }>`
+export const Text = styled.Text<{ type: 'primary' | 'secondary', size: 'small' | 'large' }>`
   color: ${({ type }) => type === 'primary' ? '#FFF' : '#EC6724'};
-  font-size: 24px;
+  font-size: ${({ size }) => size === 'small' ? '14px' : '24px'};
   font-weight: 700;
   font-family: ${({ theme }) => theme.fontFamily.regular};
 `;
