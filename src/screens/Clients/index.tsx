@@ -2,6 +2,7 @@ import { List } from "phosphor-react-native";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, TouchableOpacity, View } from "react-native";
 import { Picker } from "@react-native-picker/picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import logoImg from '@assets/teddy-logo.png';
 import { api } from "@services/api";
@@ -35,8 +36,13 @@ export function Clients() {
     async function fetchClients() {
       try {
         const { data } = await api.get('/users', { params: { page, limit }});
+
+        const storedClients = await AsyncStorage.getItem('@teddy:clients');
+        const savedClients = storedClients ? JSON.parse(storedClients) : [];  
+
+        const filteredClients = data.clients.filter((client: IClient) => !savedClients.some((c: IClient) => c.id === client.id));
         
-        setClients(data.clients);
+        setClients(filteredClients);
         setTotalPages(data.totalPages);
         setPage(data.currentPage);
       } catch (error) {
@@ -107,6 +113,20 @@ export function Clients() {
     setIsEditModalVisible(true);
   }
 
+  const handleAddClient = async (client: IClient) => {
+    try {
+      const existingClients = await AsyncStorage.getItem('@teddy:clients');
+      const clientsToStorage = existingClients ? JSON.parse(existingClients) : [];
+
+      await AsyncStorage.setItem('@teddy:clients', JSON.stringify([...clientsToStorage, client]));
+
+      setClients(clients.filter((c: IClient) => c.id !== client.id));
+
+    } catch (error) {
+      console.error('Error adding client:', error);
+    }
+  }
+
   const selectedPickerValue = (value: number) => {
     setLoading(true);
     setLimit(value);
@@ -124,7 +144,7 @@ export function Clients() {
 
     return (
       <FlatList data={clients} keyExtractor={client => client.id} renderItem={({ item }) => (
-        <Card client={item} openModalDelete={openModalDelete} openModalEdit={openModalEdit} />
+        <Card client={item} openModalDelete={openModalDelete} openModalEdit={openModalEdit} addClient={handleAddClient}/>
       )}  contentContainerStyle={{ width: '100%', flexGrow: 1 }} showsVerticalScrollIndicator={false} />
     )
   }
@@ -174,7 +194,7 @@ export function Clients() {
         client={selectedClient}
         onSave={handleSave}
       />
-      <DrawerModal visible={showDrawer} onClose={() => setShowDrawer(false)} />
+      <DrawerModal visible={showDrawer} onClose={() => setShowDrawer(false)} selected="clients"/>
     </SafeArea>
   )
 }

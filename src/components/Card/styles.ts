@@ -22,9 +22,9 @@ export const ClientSalary = styled.Text`
   font-weight: 400;
 `;
 
-export const IconsContainer = styled.View`
+export const IconsContainer = styled.View<{ storedClients?: boolean}>`
   padding-top: 20px;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: ${props => props.storedClients ? 'flex-end' : 'space-between'};
   align-items: center;
 `;
