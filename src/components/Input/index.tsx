@@ -8,7 +8,7 @@ interface InputProps {
   keyboardType?: "default" | "number-pad";
 }
 
-export function Input({ placeholder, onChangeText, value, title, keyboardType }: InputProps) {
+export function Input({ placeholder, onChangeText, value, title, keyboardType = 'default' }: InputProps) {
   return (
     <InputContainer>
       <Title>{title}</Title>
