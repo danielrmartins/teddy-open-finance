@@ -18,8 +18,6 @@ describe('Card', () => {
     const clientSalary = getByText('Salário: R$ 1.000,00');
     const companyValuation = getByText('Empresa: R$ 10.000,00');
 
-    // console.log(clientName, clientSalary, companyValuation);
-
     expect(clientName).toBeDefined();
     expect(clientSalary).toBeDefined();
     expect(companyValuation).toBeDefined();
