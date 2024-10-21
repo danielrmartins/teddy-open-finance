@@ -6,7 +6,7 @@ Este projeto faz parte de um sistema de Open Finance que permite o gerenciamento
 O sistema possui as seguintes funcionalidades:
 - **Tela inicial**: O usuário pode inserir seu nome e será redirecionado para uma lista de clientes cadastrados.
 - **Lista de clientes**: Permite cadastrar, selecionar, atualizar e excluir clientes.
-Visualização de cliente: Exibe uma tela com a lista de clientes selecionados.
+- **Visualização de cliente**: Exibe uma tela com a lista de clientes selecionados.
 
 ## 🚀 Tecnologias Utilizadas
 - **React Native**
